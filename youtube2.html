@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📼Youtube</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <style>
+        #small-div{
+            width: 500px;
+            margin-top: 10px;
+            margin-left: 100px;
+        }
+
+        #results{
+            display:flex;
+          flex-direction: row;
+        }
+
+        .video-cont{
+            display: grid;
+        grid-template-columns: repeat(4,1fr);
+        gap: 20px;
+        }
+
+        @media screen and (max-width:942px){
+            .video-cont{
+            display: grid;
+        grid-template-columns: repeat(2,1fr);
+        gap: 20px;
+        }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-danger navbar-dark py-3">
+        <div class="container">
+            <a href="" class="navbar-brand ">Youtube.com</a>
+            <button class="navbar-toggler" type="button">
+              <a href="" class="navbar-toggler-icon" data-bs-toggle="collapse" data-bs-target="#nav-menu"></a>  
+            </button>
+ <div class="collapse navbar-collapse" id="nav-menu">
+    <div class="input-group mb-3" id="small-div">
+        <input type="text" class="form-control"
+        placeholder="Search Here" id="searchPlace">
+        <div class="input-group-append">
+          <button class="btn btn-dark btn-lg"type="button" id="searchBtn">Search</button>
+        </div>
+      </div>
+ </div>
+           
+        </div>
+ 
+    </nav>
+<hr>
+    <div id="results">
+
+    </div>
+    <script>
+        const searchPlace=document.getElementById('searchPlace');
+        const searchBtn=document.getElementById('searchBtn');
+        const results=document.getElementById('results')
+results.style.display='flex'
+        searchBtn.addEventListener('click',handleSearch)
+
+        function handleSearch(){
+            return fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${searchPlace.value}&&maxResults=24&&key=AIzaSyCnIdgIp58QRiUZUO2nAGM_eW0OqIhXiSg`)
+.then(res=>res.json())
+.then(
+    (res)=>{
+        console.log(res)
+        console.log(res.items)
+        results.innerHTML=""
+const videoCont=document.createElement('div')
+
+        for(item of res.items){
+            var card=createYoutubeCard(item)
+           videoCont.append(card)
+        }
+        videoCont.className='video-cont'
+        // videoCont.style.display='flex'
+        // videoCont.style.gap='20px'
+        results.append(videoCont)
+    }
+)
+
+
+        }
+
+        function createYoutubeCard(data){
+            if(data.id.kind==='youtube#channel'){
+          return ``
+            }
+            
+            else{
+            const div=document.createElement('div')
+            
+          div.innerHTML=  ` <iframe width="auto"
+ height="auto" 
+ src="https://www.youtube.com/embed/${data.id.videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+              return div 
+            
+            }
+
+            
+        }
+        
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</body>
+</html>
